@@ -69,13 +69,16 @@ p {
     text-align: center;
 }
 
+
 @font-face {
-    font-family: "Bar-Code 39";
-    src: url(Code39.ttf) format('truetype');
+    font-family: 'NanumGothic';
+    src: url('../font/NanumGothic.ttf') format('ttf');
+    font-weight: 300;
+    font-style: normal;
 }
 
 .barcode {
-    font-family: "Bar-Code 39";
+    font-family: "NanumGothic";
     font-size: 26px;
 }
 

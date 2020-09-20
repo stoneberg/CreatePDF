@@ -1,7 +1,12 @@
 package com.blog.example.CreatePDF.Controller;
 
+import com.blog.example.CreatePDF.Service.PdfService;
+import com.blog.example.CreatePDF.Utils.ZipUtil;
+import com.blog.example.CreatePDF.dto.UserInfo;
 import com.itextpdf.text.DocumentException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +18,15 @@ import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static com.itextpdf.text.pdf.BaseFont.EMBEDDED;
 import static com.itextpdf.text.pdf.BaseFont.IDENTITY_H;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/testapp")
 @Controller
@@ -29,6 +34,8 @@ public class PDFCreator {
 
     private static final String UTF_8 = "UTF-8";
     private final SpringTemplateEngine templateEngine;
+    private final PdfService pdfService;
+    private final ZipUtil zipUtil;
 
     /**
      * http://localhost:8080/testapp/file/my_pledge.pdf
@@ -42,7 +49,7 @@ public class PDFCreator {
     public void downloadPDFResource(@PathVariable("fileName") String fileName, HttpServletResponse response)
             throws IOException, DocumentException {
         // a web service or whatever.
-        Data data = exampleDataForJohnDoe();
+        UserInfo data = pdfService.getUserInfo(); // get data from database
         Context context = new Context();
         context.setVariable("data", data);
 
@@ -64,7 +71,7 @@ public class PDFCreator {
     public ByteArrayOutputStream generatePdfDocumentBaos(String html) throws IOException, DocumentException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ITextRenderer renderer = new ITextRenderer();
-        renderer.getFontResolver().addFont("templates/fonts/Code39.ttf", IDENTITY_H, EMBEDDED);
+        renderer.getFontResolver().addFont("templates/font/NanumGothic.ttf", IDENTITY_H, EMBEDDED);
         renderer.setDocumentFromString(html);
         renderer.layout();
         renderer.createPDF(baos);
@@ -83,62 +90,16 @@ public class PDFCreator {
         return outputStream.toString(UTF_8);
     }
 
-    private Data exampleDataForJohnDoe() {
-        Data data = new Data();
-        data.setFirstname("Lee");
-        data.setLastname("Yu Pyeong");
-        data.setStreet("Example Street 1001");
-        data.setZipCode("12345");
-        data.setCity("Annoy City");
-        return data;
-    }
-
-    static class Data {
-        private String firstname;
-        private String lastname;
-        private String street;
-        private String zipCode;
-        private String city;
-
-        public String getFirstname() {
-            return firstname;
-        }
-
-        public void setFirstname(String firstname) {
-            this.firstname = firstname;
-        }
-
-        public String getLastname() {
-            return lastname;
-        }
-
-        public void setLastname(String lastname) {
-            this.lastname = lastname;
-        }
-
-        public String getStreet() {
-            return street;
-        }
-
-        public void setStreet(String street) {
-            this.street = street;
-        }
-
-        public String getZipCode() {
-            return zipCode;
-        }
-
-        public void setZipCode(String zipCode) {
-            this.zipCode = zipCode;
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
+    /**
+     * http://localhost:8080/testapp/files/my_pledge.zip
+     *
+     * @param fileName
+     * @param response
+     */
+    @GetMapping("/files/{fileName:.+}")
+    public void downloadZip(@PathVariable("fileName") String fileName, HttpServletResponse response) {
+        List<UserInfo> userList = pdfService.getUserInfoList(); // get data from database
+        zipUtil.downloadZipFile(fileName, userList, response);
     }
 
 

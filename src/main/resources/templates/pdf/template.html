@@ -6,14 +6,15 @@
         <link rel="stylesheet" type="text/css" media="all" href="style.css"/>
     </head>
 
-    <body>
-        <div class='header' th:include="header::header"></div>
+    <body style="font-family: NanumGothic;">
+        <div class='header' th:include="pdf/header::header"></div>
 
-        <div th:include="letterhead::letterhead"></div>
+        <div th:include="pdf/letterhead::letterhead"></div>
 
-        <h1>YOUR EXAMPLE THYMELEAF PDF</h1>
+        <h1>[[${data.getTitle()}]]</h1>
 
         <p>Dear [[${data.getFirstname()}]] [[${data.getLastname()}]],</p>
+        <div><img class="logo" th:src="@{classpath:/templates/pdf/portrait.png}" alt="logo"></div>
 
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eu erat quis urna fringilla faucibus. Fusce vitae est
             sed sapien laoreet lacinia maximus quis turpis. Aliquam auctor diam a felis sodales gravida.</p>
@@ -33,8 +34,6 @@
 
         <p><b>You find more information on the second page.</b></p>
 
-        <div class='footer' th:include="footer::footer"></div>
-
         <div class="next-page">
 
             <h2>More Information</h2>
@@ -45,27 +44,10 @@
                 consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
                 diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
                 takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-                diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-                diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-                diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p>Hello World!</p>
         </div>
 
-        <div class='footer' th:include="footer::footer"></div>
+        <div class='footer' th:include="pdf/footer::footer"></div>
     </body>
 
 </html>
